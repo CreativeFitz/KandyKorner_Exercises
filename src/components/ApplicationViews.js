@@ -7,41 +7,35 @@ import CandiesList from './candies/CandiesList'
 
 class ApplicationViews extends Component {
 
-    storesFromAPI = [
-        {id: 1, name: "All Da' Candies"},
-        {id: 2, name: "Sweetning Sweets"},
-        {id: 3, name: "Chocoholic"},
-        {id: 4, name: "Bubble Trouble"}
-    ]
-
-    employeesFromAPI = [
-        {id: 1, name: "Ted"},
-        {id: 2, name: "Tom"},
-        {id: 3, name: "Tony"},
-        {id: 4, name: "Timmy"},
-        {id: 5, name: "Tammy"}
-    ]
-
-    candyTypesFromAPI = [
-        {id: 1, name: "Chocolate"},
-        {id: 2, name: "Taffy"},
-        {id: 3, name: "Bubble Gum"},
-        {id: 4, name: "Cookies"}
-    ]
-
-    candiesFromAPI = [
-        {id: 1, name: "Reeses"},
-        {id: 2, name: "Wonka-Bar"},
-        {id: 3, name: "Double Bubble"},
-        {id: 4, name: "Famous Amos"}
-    ]
-
     state = {
-        stores: this.storesFromAPI,
-        employees: this.employeesFromAPI,
-        candyTypes: this.candyTypesFromAPI,
-        candies: this.candiesFromAPI
+        stores: [],
+        employees: [],
+        candyTypes: [],
+        candies: []
     }
+
+    componentDidMount(){
+        const newState = {};
+        fetch("http://localhost:5002/stores")
+        .then(stores => stores.json())
+        .then(parsedStores => {
+            newState.stores = parsedStores;
+            return fetch("http://localhost:5002/employees")
+        }).then(employees => employees.json())
+        .then(parsedEmployees => {
+            newState.employees = parsedEmployees;
+            return fetch("http://localhost:5002/candyTypes")
+        }).then(candyTypes => candyTypes.json())
+        .then(parsedCandyTypes =>{
+            newState.candyTypes =parsedCandyTypes;
+            return fetch("http://localhost:5002/candies")
+        }).then(candies => candies.json())
+        .then(parsedCandies => {
+            newState.candies = parsedCandies;
+            this.setState(newState);
+        })
+    }
+
 
     render() {
         return (
