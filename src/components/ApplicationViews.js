@@ -13,6 +13,17 @@ class ApplicationViews extends Component {
         candyTypes: [],
         candies: []
     }
+    deleteCandies = id => {
+        return fetch(`http://localhost:5002/candies/${id}`,{
+            method: "DELETE"
+        })
+        .then(e => e.json())
+        .then(() => fetch(`http://localhost:5002/candies`))
+        .then(e => e.json ()
+        .then(candies => this.setState({
+            candies:candies
+        })))
+    }
 
     componentDidMount(){
         const newState = {};
@@ -44,7 +55,7 @@ class ApplicationViews extends Component {
                 }} />
                 <Route path="/employees" render={(props) => {return <EmployeesList employees={this.state.employees}/>}} />
                 <Route path="/candyTypes" render={(props) => {return <CandyTypesList candyTypes={this.state.candyTypes}/>}} />
-                <Route path="/candiesList" render={(props) => { return <CandiesList candies={this.state.candies}/>}}/>
+                <Route path="/candiesList" render={(props) => { return <CandiesList deleteCandy={this.deleteCandy} candies={this.state.candies}/>}}/>
             </div>
         );
     }
